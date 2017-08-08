@@ -23,6 +23,7 @@ class ViewController: NSViewController {
     private var audioPlayer: AKAudioPlayer!
     private var timePlayer: AKTimePitch!
     private var panner: AKPanner!
+    private var booster: AKBooster!
     
     @IBOutlet private var audioInputPlot: EZAudioPlot!
     
@@ -44,7 +45,21 @@ class ViewController: NSViewController {
     
     
     @IBAction func changePan(_ sender: NSPopUpButton) {
-        panner.pan = Double(sender.selectedTag())
+        // panner.pan = Double(sender.selectedTag())
+        
+        switch sender.selectedTag() {
+        case 1: // left
+            booster.leftGain = 1.0
+            booster.rightGain = 0.0
+            
+        case -1: // right
+            booster.leftGain = 0.0
+            booster.rightGain = 1.0
+            
+        default: // stereo
+            booster.leftGain = 1.0
+            booster.rightGain = 1.0
+        }
     }
 
     @IBAction func positionSlider(_ sender: NSSlider) {
@@ -108,8 +123,11 @@ class ViewController: NSViewController {
         pitch.tickMarkPosition = NSTickMarkPosition.below
         
         timePlayer = AKTimePitch(audioPlayer)
-        panner = AKPanner(timePlayer)
-        AudioKit.output = panner
+        //panner = AKPanner(timePlayer)
+        //AudioKit.output = panner
+        
+        booster = AKBooster(timePlayer)
+        AudioKit.output = booster
         
         setupPlot()
     }
@@ -133,7 +151,8 @@ class ViewController: NSViewController {
         case .play:
            if playState == .stop {
                 AudioKit.start()
-                panner.start()
+                // panner.start()
+                booster.start()
                 timePlayer.start()
                 audioPlayer.start()
                 audioPlotter.resetHistoryBuffers()
@@ -152,7 +171,8 @@ class ViewController: NSViewController {
             
         case .stop:
             AudioKit.stop()
-            panner.stop()
+            // panner.stop()
+            booster.stop()
             timePlayer.stop()
             audioPlayer.stop()
             NSLog("stop play")
