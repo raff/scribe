@@ -797,8 +797,35 @@
                                     <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
                                 </textFieldCell>
                             </textField>
+                            <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" allowsCharacterPickerTouchBarItem="NO" translatesAutoresizingMaskIntoConstraints="NO" id="BDl-TC-82k">
+                                <rect key="frame" x="867" y="73" width="31" height="17"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxY="YES"/>
+                                <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" title="Pan:" id="aUB-x1-ZmZ">
+                                    <font key="font" metaFont="system"/>
+                                    <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
+                                    <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
+                                </textFieldCell>
+                            </textField>
+                            <popUpButton verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="XdC-1K-1rL">
+                                <rect key="frame" x="902" y="66" width="76" height="26"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxY="YES"/>
+                                <popUpButtonCell key="cell" type="push" title="Center" bezelStyle="rounded" alignment="left" lineBreakMode="truncatingTail" state="on" borderStyle="borderAndBezel" imageScaling="proportionallyDown" inset="2" selectedItem="Fjp-Mz-Fdk" id="LPM-ha-OBo">
+                                    <behavior key="behavior" lightByBackground="YES" lightByGray="YES"/>
+                                    <font key="font" metaFont="menu"/>
+                                    <menu key="menu" id="M82-tf-LcV">
+                                        <items>
+                                            <menuItem title="Left" tag="1" id="eYC-Yf-767"/>
+                                            <menuItem title="Center" state="on" id="Fjp-Mz-Fdk"/>
+                                            <menuItem title="Right" tag="-1" id="oMG-sl-yA6"/>
+                                        </items>
+                                    </menu>
+                                </popUpButtonCell>
+                                <connections>
+                                    <action selector="changePan:" target="XfG-lQ-9wD" id="rZw-UI-YxI"/>
+                                </connections>
+                            </popUpButton>
                             <box verticalHuggingPriority="750" fixedFrame="YES" boxType="separator" translatesAutoresizingMaskIntoConstraints="NO" id="Ygu-xz-fxa">
-                                <rect key="frame" x="0.0" y="32" width="1023" height="61"/>
+                                <rect key="frame" x="0.0" y="-2" width="1023" height="129"/>
                                 <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMaxY="YES"/>
                             </box>
                         </subviews>
@@ -807,6 +834,7 @@
                         <outlet property="audioPlotter" destination="nCu-D4-tKa" id="Q39-8s-eFm"/>
                         <outlet property="displayPitch" destination="uB9-Y2-4YB" id="Jpi-mc-6zC"/>
                         <outlet property="displaySpeed" destination="cQV-Cj-b4y" id="P72-22-dT9"/>
+                        <outlet property="pan" destination="XdC-1K-1rL" id="eKC-Ta-gdF"/>
                         <outlet property="pitch" destination="a8y-Yi-VrN" id="6PT-EJ-515"/>
                         <outlet property="playTime" destination="Vh7-0I-yJW" id="JnP-iF-pv3"/>
                         <outlet property="position" destination="cq4-nj-Pt2" id="pFc-Kf-KaL"/>

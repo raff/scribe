@@ -22,6 +22,7 @@ class ViewController: NSViewController {
     
     private var audioPlayer: AKAudioPlayer!
     private var timePlayer: AKTimePitch!
+    private var panner: AKPanner!
     
     @IBOutlet private var audioInputPlot: EZAudioPlot!
     
@@ -39,6 +40,11 @@ class ViewController: NSViewController {
     @IBAction func changePitch(_ sender: NSSlider) {
         timePlayer.pitch = sender.doubleValue * 100.0 // in cents
         displayPitch.stringValue = String(format: "%+d", sender.integerValue)
+    }
+    
+    
+    @IBAction func changePan(_ sender: NSPopUpButton) {
+        panner.pan = Double(sender.selectedTag())
     }
 
     @IBAction func positionSlider(_ sender: NSSlider) {
@@ -102,13 +108,14 @@ class ViewController: NSViewController {
         pitch.tickMarkPosition = NSTickMarkPosition.below
         
         timePlayer = AKTimePitch(audioPlayer)
-        AudioKit.output = timePlayer
+        panner = AKPanner(timePlayer)
+        AudioKit.output = panner
         
         setupPlot()
     }
     
     override func viewWillAppear() {
-        play(p: .play)
+        // play(p: .play)
     }
     
     override func viewWillDisappear() {
@@ -122,13 +129,11 @@ class ViewController: NSViewController {
     }
     
     func play(p: PlayStates) {
-        let m = "\(p) started:\(audioPlayer.isStarted), playing:\(audioPlayer.isPlaying) stopped:\(audioPlayer.isStopped) bypassed:\(audioPlayer.isBypassed)"
-        NSLog(m)
-        
         switch p {
         case .play:
-           if audioPlayer.isBypassed {
+           if playState == .stop {
                 AudioKit.start()
+                panner.start()
                 timePlayer.start()
                 audioPlayer.start()
                 audioPlotter.resetHistoryBuffers()
@@ -147,6 +152,7 @@ class ViewController: NSViewController {
             
         case .stop:
             AudioKit.stop()
+            panner.stop()
             timePlayer.stop()
             audioPlayer.stop()
             NSLog("stop play")
