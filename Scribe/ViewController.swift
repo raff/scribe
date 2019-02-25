@@ -7,6 +7,7 @@
 //
 
 import AudioKit
+import AudioKitUI
 import Cocoa
 
 class ViewController: NSViewController {
@@ -103,7 +104,7 @@ class ViewController: NSViewController {
         dialog.allowsMultipleSelection = false;
         dialog.allowedFileTypes        = ["aiff", "mp3", "wav"];
         
-        if (dialog.runModal() == NSModalResponseOK) {
+        if (dialog.runModal() == NSApplication.ModalResponse.OK) {
             let result = dialog.url // Pathname of the file
             
             if (result != nil) {
@@ -153,14 +154,14 @@ class ViewController: NSViewController {
         speed.integerValue = 100
         speed.allowsTickMarkValuesOnly = true
         speed.numberOfTickMarks = 20
-        speed.tickMarkPosition = NSTickMarkPosition.below
+        speed.tickMarkPosition = NSSlider.TickMarkPosition.below
         
         pitch.minValue = -12
         pitch.maxValue = +12
         pitch.integerValue = 0
         pitch.allowsTickMarkValuesOnly = true
         pitch.numberOfTickMarks = 25
-        pitch.tickMarkPosition = NSTickMarkPosition.below
+        pitch.tickMarkPosition = NSSlider.TickMarkPosition.below
         
         timePlayer = AKTimePitch(audioPlayer)
         //panner = AKPanner(timePlayer)
@@ -173,16 +174,24 @@ class ViewController: NSViewController {
     }
     
     override func viewWillAppear() {
-        AudioKit.start()
-        booster.start()
-        timePlayer.start()
+        do {
+            try AudioKit.start()
+            booster.start()
+            timePlayer.start()
+        } catch {
+            NSLog("AudioKit didn't start")
+        }
     }
     
     override func viewWillDisappear() {
-        AudioKit.stop()
+        do {
+            try AudioKit.stop()
+        } catch {
+            NSLog("AudioKit didn't stop")
+        }
+
         booster.stop()
         timePlayer.stop()
-        
         exit(0)
     }
     
@@ -223,9 +232,9 @@ class ViewController: NSViewController {
         plot.plotType = .rolling
         plot.shouldFill = true
         plot.shouldMirror = true
-        //  plot.shouldOptimizeForRealtimePlot = false
+        //plot.shouldOptimizeForRealtimePlot = true
         plot.color = NSColor.blue
-        plot.autoresizingMask = [.viewWidthSizable, .viewHeightSizable]
+        plot.autoresizingMask = [NSView.AutoresizingMask.width, NSView.AutoresizingMask.height]
         
         audioPlotter.addSubview(plot)
     }
