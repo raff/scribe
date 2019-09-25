@@ -25,8 +25,7 @@ class ViewController: NSViewController {
     private var timePlayer: AKTimePitch!
     private var panner: AKPanner!
     private var booster: AKBooster!
-    
-    @IBOutlet private var audioInputPlot: EZAudioPlot!
+    private var plotter: AKNodeOutputPlot!
     
     enum PlayStates {
         case play, pause, stop
@@ -205,22 +204,26 @@ class ViewController: NSViewController {
         switch p {
         case .play:
             if playState == .stop {
-                audioPlotter.resetHistoryBuffers()
+                //audioPlotter.resetHistoryBuffers()
                 audioPlayer.start()
+                plotter.resume()
                 NSLog("start play")
             } else if !audioPlayer.isPlaying {
                 audioPlayer.resume()
+                plotter.resume()
                 NSLog("resume play")
             }
         
         case .pause:
             if audioPlayer.isPlaying {
                 audioPlayer.pause()
+                plotter.pause()
                 NSLog("pause play")
             }
             
         case .stop:
             audioPlayer.stop()
+            plotter.pause()
             NSLog("stop play")
         }
         
@@ -228,15 +231,13 @@ class ViewController: NSViewController {
     }
     
     func setupPlot() {
-        let plot = AKNodeOutputPlot(timePlayer, frame: audioPlotter.bounds)
-        plot.plotType = .rolling
-        plot.shouldFill = true
-        plot.shouldMirror = true
-        //plot.shouldOptimizeForRealtimePlot = true
-        plot.color = NSColor.blue
-        plot.autoresizingMask = [NSView.AutoresizingMask.width, NSView.AutoresizingMask.height]
-        
-        audioPlotter.addSubview(plot)
+        plotter = AKNodeOutputPlot(timePlayer, frame: audioPlotter.bounds)
+        plotter.plotType = .rolling
+        plotter.shouldFill = true
+        plotter.shouldMirror = true
+        plotter.color = NSColor.blue
+        plotter.autoresizingMask = [NSView.AutoresizingMask.width, NSView.AutoresizingMask.height]
+        audioPlotter.addSubview(plotter)
     }
     
 }
